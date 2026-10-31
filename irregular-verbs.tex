@@ -1,0 +1,309 @@
+% irregular-verbs.tex -- the fifty most common irregular verbs in English
+%
+%   make build      -> irregular-verbs.pdf (worksheet) and
+%                      irregular-verbs-solutions.pdf (answer key)
+%
+% The fifty verbs, grouped by pattern (British English forms):
+%   A-A-A  put, let, set, cut, read
+%   A-B-B  have, say, get, make, think, find, tell, leave, feel, bring, keep,
+%          hold, stand, hear, mean, meet, pay, sit, lead, lose, send, build,
+%          understand, spend, buy
+%   A-B-A  come, become, run
+%   A-B-C  be, do, go, know, take, see, give, begin, write, speak, grow, fall,
+%          draw, break, drive, eat, choose
+%
+% Note: \formrow splits its argument at commas, so table cells must not
+% contain commas.
+%
+\documentclass[11pt]{article}
+\usepackage{worksheet}
+
+\begin{document}
+
+\worksheetheader[The fifty most common irregular verbs]{Irregular Verbs}
+
+% ===========================================================================
+% Part 1: the forms, grouped by pattern
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+\exercise{One form for everything}%
+  {These verbs have the same form in all three columns. Complete the table.
+   (Careful: the past forms of \textit{to read} are spelt the same but
+   pronounced like \textit{red}.)}
+
+\begin{formtable}{Infinitive, Past simple, Past participle}
+  \formrow{to put,  \ans{put},  \ans{put}}
+  \formrow{to let,  \ans{let},  \ans{let}}
+  \formrow{to set,  \ans{set},  \ans{set}}
+  \formrow{to cut,  \ans{cut},  \ans{cut}}
+  \formrow{to read, \ans{read}, \ans{read}}
+\end{formtable}
+
+% ---------------------------------------------------------------------------
+\exercise{Two forms the same (1)}%
+  {The past simple and the past participle are the same. Complete the table.}
+
+\begin{formtable}{Infinitive, Past simple, Past participle}
+  \formrow{to have,  \ans{had},     \ans{had}}
+  \formrow{to say,   \ans{said},    \ans{said}}
+  \formrow{to get,   \ans{got},     \ans{got}}
+  \formrow{to make,  \ans{made},    \ans{made}}
+  \formrow{to think, \ans{thought}, \ans{thought}}
+  \formrow{to find,  \ans{found},   \ans{found}}
+  \formrow{to tell,  \ans{told},    \ans{told}}
+  \formrow{to leave, \ans{left},    \ans{left}}
+  \formrow{to feel,  \ans{felt},    \ans{felt}}
+  \formrow{to bring, \ans{brought}, \ans{brought}}
+  \formrow{to keep,  \ans{kept},    \ans{kept}}
+  \formrow{to hold,  \ans{held},    \ans{held}}
+  \formrow{to stand, \ans{stood},   \ans{stood}}
+\end{formtable}
+
+% ---------------------------------------------------------------------------
+\exercise{Two forms the same (2)}%
+  {Now some infinitives are missing, too. Complete the table.}
+
+\begin{formtable}{Infinitive, Past simple, Past participle}
+  \formrow{to hear,              \ans{heard},  \ans{heard}}
+  \formrow{\ans{to mean},        meant,        \ans{meant}}
+  \formrow{to meet,              \ans{met},    \ans{met}}
+  \formrow{to pay,               \ans{paid},   \ans{paid}}
+  \formrow{\ans{to sit},         sat,          \ans{sat}}
+  \formrow{to lead,              \ans{led},    \ans{led}}
+  \formrow{\ans{to lose},        lost,         \ans{lost}}
+  \formrow{to send,              \ans{sent},   \ans{sent}}
+  \formrow{to build,             \ans{built},  \ans{built}}
+  \formrow{\ans{to understand},  understood,   \ans{understood}}
+  \formrow{to spend,             \ans{spent},  \ans{spent}}
+  \formrow{\ans{to buy},         bought,       \ans{bought}}
+\end{formtable}
+
+% ---------------------------------------------------------------------------
+\exercise{Back to the start}%
+  {The past participle is the same as the infinitive. Complete the table.}
+
+\begin{formtable}{Infinitive, Past simple, Past participle}
+  \formrow{to come,   \ans{came},   \ans{come}}
+  \formrow{to become, \ans{became}, \ans{become}}
+  \formrow{to run,    \ans{ran},    \ans{run}}
+\end{formtable}
+
+% ---------------------------------------------------------------------------
+\exercise{Three different forms (1)}%
+  {All three forms are different. Complete the table.}
+
+\begin{formtable}{Infinitive, Past simple, Past participle}
+  \formrow{to be,    \ans{was / were}, \ans{been}}
+  \formrow{to do,    \ans{did},        \ans{done}}
+  \formrow{to go,    \ans{went},       \ans{gone}}
+  \formrow{to know,  \ans{knew},       \ans{known}}
+  \formrow{to take,  \ans{took},       \ans{taken}}
+  \formrow{to see,   \ans{saw},        \ans{seen}}
+  \formrow{to give,  \ans{gave},       \ans{given}}
+  \formrow{to begin, \ans{began},      \ans{begun}}
+  \formrow{to write, \ans{wrote},      \ans{written}}
+\end{formtable}
+
+% ---------------------------------------------------------------------------
+\exercise{Three different forms (2)}%
+  {Complete the table. One form is given in each row.}
+
+\begin{formtable}{Infinitive, Past simple, Past participle}
+  \formrow{to speak,         \ans{spoke},  \ans{spoken}}
+  \formrow{\ans{to grow},    grew,         \ans{grown}}
+  \formrow{to fall,          \ans{fell},   \ans{fallen}}
+  \formrow{\ans{to draw},    \ans{drew},   drawn}
+  \formrow{to break,         \ans{broke},  \ans{broken}}
+  \formrow{\ans{to drive},   drove,        \ans{driven}}
+  \formrow{to eat,           \ans{ate},    \ans{eaten}}
+  \formrow{\ans{to choose},  \ans{chose},  chosen}
+\end{formtable}
+
+% ---------------------------------------------------------------------------
+\exercise{Odd one out}%
+  {Three verbs in each line follow the same pattern. Write the one that
+   does not.}
+
+\begin{gapexercise}
+  \item put \quad cut \quad take \quad let          \hfill \gap{take}
+  \item come \quad run \quad go \quad become        \hfill \gap{go}
+  \item tell \quad keep \quad write \quad meet      \hfill \gap{write}
+  \item speak \quad break \quad buy \quad choose    \hfill \gap{buy}
+  \item know \quad grow \quad find \quad draw       \hfill \gap{find}
+  \item set \quad sit \quad cut \quad read          \hfill \gap{sit}
+  \item bring \quad think \quad drive \quad buy     \hfill \gap{drive}
+  \item feel \quad keep \quad eat \quad mean        \hfill \gap{eat}
+\end{gapexercise}
+
+% ---------------------------------------------------------------------------
+\exercise{Irregular verbs: past simple}%
+  {Draw a line from each infinitive to its past simple form.}
+
+\begin{matching}{Infinitive}{Past simple}
+  \matchpair{to say}{said}
+  \matchpair{to mean}{meant}
+  \matchpair{to stand}{stood}
+  \matchpair{to understand}{understood}
+  \matchpair{to do}{did}
+  \matchpair{to get}{got}
+  \matchpair{to make}{made}
+  \matchpair{to hear}{heard}
+  \matchpair{to have}{had}
+  \matchpair{to find}{found}
+\end{matching}
+
+% ---------------------------------------------------------------------------
+\exercise{Irregular verbs: past participle}%
+  {Draw a line from each infinitive to its past participle.}
+
+\begin{matching}{Infinitive}{Past participle}
+  \matchpair{to be}{been}
+  \matchpair{to go}{gone}
+  \matchpair{to know}{known}
+  \matchpair{to begin}{begun}
+  \matchpair{to take}{taken}
+  \matchpair{to give}{given}
+  \matchpair{to draw}{drawn}
+  \matchpair{to speak}{spoken}
+  \matchpair{to write}{written}
+  \matchpair{to see}{seen}
+\end{matching}
+
+% ===========================================================================
+% Part 2: the verbs in context
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+\exercise{Past simple}{Put the verb in brackets into the past simple.}
+
+\begin{gapexercise}
+  \item Last summer we \gapverb{to go}{went} to Scotland.
+  \item I \gapverb{to see}{saw} your brother at the station this morning.
+  \item She \gapverb{to buy}{bought} a new bike last week.
+  \item We \gapverb{to eat}{ate} far too much at the party.
+  \item My grandfather \gapverb{to build}{built} this house in 1965.
+  \item The film \gapverb{to begin}{began} at eight o'clock.
+  \item He \gapverb{to lose}{lost} his keys on the way home.
+  \item I \gapverb{to think}{thought} the test was quite easy.
+  \item My parents \gapverb{to meet}{met} at university.
+  \item Who \gapverb{to break}{broke} the kitchen window?
+  \item We \gapverb{to pay}{paid} for the tickets online.
+  \item The teacher \gapverb{to tell}{told} us a funny story.
+\end{gapexercise}
+
+% ---------------------------------------------------------------------------
+\exercise{Present perfect}{Put the verb in brackets into the past participle.}
+
+\begin{gapexercise}
+  \item Have you ever \gapverb{to eat}{eaten} sushi?
+  \item I have \gapverb{to know}{known} her since we were children.
+  \item She has \gapverb{to write}{written} three books about birds.
+  \item We haven't \gapverb{to see}{seen} that film yet.
+  \item Has anyone \gapverb{to take}{taken} my pen?
+  \item The temperature has \gapverb{to fall}{fallen} below zero.
+  \item He has \gapverb{to drive}{driven} all the way from Glasgow.
+  \item They have \gapverb{to choose}{chosen} a name for the baby.
+  \item I have never \gapverb{to speak}{spoken} to our new neighbours.
+  \item Have you \gapverb{to do}{done} your homework?
+  \item It has \gapverb{to be}{been} a very long day.
+  \item My aunt has \gapverb{to give}{given} me a lot of good advice.
+\end{gapexercise}
+
+% ---------------------------------------------------------------------------
+\exercise{Past simple or past participle?}%
+  {Put the verb in brackets into the correct form.}
+
+\begin{gapexercise}
+  \item When I was ten, I \gapverb{to grow}{grew} ten centimetres in one year.
+  \item Look how tall you have \gapverb{to grow}{grown}!
+  \item She \gapverb{to leave}{left} the office at six o'clock.
+  \item Has the train already \gapverb{to leave}{left}?
+  \item He \gapverb{to fall}{fell} off his bike yesterday.
+  \item Somebody has \gapverb{to break}{broken} my glasses.
+  \item We \gapverb{to come}{came} home very late last night.
+  \item I'm so glad you have \gapverb{to come}{come} to visit us.
+  \item I \gapverb{to run}{ran} five kilometres this morning.
+  \item Have you ever \gapverb{to run}{run} a marathon?
+  \item Last year my cousin \gapverb{to become}{became} a teacher.
+  \item My little sister has \gapverb{to become}{become} very good at chess.
+  \item I \gapverb{to hear}{heard} a strange noise in the night.
+  \item Have you \gapverb{to hear}{heard} the news?
+\end{gapexercise}
+
+% ---------------------------------------------------------------------------
+\exercise{Choose the verb}%
+  {Choose a verb from the box and put it into the past simple.
+   Use each verb once.}
+
+\wordbox{to bring, to feel, to hold, to keep, to lead, to send, to sit,
+         to spend, to stand}
+
+\begin{gapexercise}
+  \item We \gap{sat} in the garden all afternoon.
+  \item She \gap{sent} me a postcard from Rome.
+  \item I \gap{felt} very tired after the long walk.
+  \item The guide \gap{led} us through the old town.
+  \item He \gap{held} the baby very carefully.
+  \item They \gap{spent} all their money on a new car.
+  \item My friend \gap{brought} a cake to the party.
+  \item We \gap{stood} in the rain for an hour.
+  \item She \gap{kept} all his letters in a box.
+\end{gapexercise}
+
+% ---------------------------------------------------------------------------
+\exercise{Find the mistake}%
+  {Each sentence has one wrong verb form. Write the correct form.}
+
+\begin{gapexercise}
+  \item Yesterday I \textit{buyed} a new jacket.            \hfill \gap{bought}
+  \item She has \textit{wrote} a letter to the newspaper.    \hfill \gap{written}
+  \item We \textit{goed} to the beach last weekend.          \hfill \gap{went}
+  \item Have you ever \textit{drove} a lorry?                \hfill \gap{driven}
+  \item He \textit{thinked} the answer was wrong.            \hfill \gap{thought}
+  \item I have \textit{knew} him for years.                  \hfill \gap{known}
+  \item The children have \textit{ate} all the biscuits.     \hfill \gap{eaten}
+  \item In the end, he \textit{choosed} the red one.         \hfill \gap{chose}
+  \item The glass has \textit{fell} off the table.           \hfill \gap{fallen}
+  \item I \textit{seen} him in town yesterday.               \hfill \gap{saw}
+\end{gapexercise}
+
+% ---------------------------------------------------------------------------
+\exercise{Anna's Saturday}%
+  {Read the story and put the verbs in brackets into the past simple.}
+
+{\linespread{2.0}\selectfont
+Last Saturday, Anna \gapverb[2.8cm]{to get}{got} up early.
+She \gapverb[2.8cm]{to have}{had} a quick breakfast and
+\gapverb[2.8cm]{to put}{put} on her coat. Then she
+\gapverb[2.8cm]{to drive}{drove} to the station and
+\gapverb[2.8cm]{to take}{took} the train to the city.
+On the train she \gapverb[2.8cm]{to read}{read} a magazine and
+\gapverb[2.8cm]{to write}{wrote} a few postcards.
+In the city she \gapverb[2.8cm]{to meet}{met} her old friend Sam.
+They \gapverb[2.8cm]{to sit}{sat} in a café and
+\gapverb[2.8cm]{to speak}{spoke} for hours.
+Sam \gapverb[2.8cm]{to tell}{told} her all about his new job.
+Later they \gapverb[2.8cm]{to go}{went} to a bookshop, and Anna
+\gapverb[2.8cm]{to find}{found} a book that she
+\gapverb[2.8cm]{to know}{knew} her brother would love, so she
+\gapverb[2.8cm]{to buy}{bought} it for him.
+In the evening she \gapverb[2.8cm]{to come}{came} home tired but happy
+and \gapverb[2.8cm]{to fall}{fell} asleep on the sofa.
+\par}
+
+% ---------------------------------------------------------------------------
+\exercise{Your turn: last weekend}%
+  {Write five sentences about what you did last weekend. Use at least five
+   different irregular verbs from this worksheet.}
+
+\writinglines{6}
+
+% ---------------------------------------------------------------------------
+\exercise{Your turn: have you ever \ldots?}%
+  {Write three sentences about things you have or have never done. Use
+   \textit{to eat}, \textit{to see} and \textit{to be}.}
+
+\writinglines{4}
+
+\end{document}

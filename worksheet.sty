@@ -1,0 +1,477 @@
+% worksheet.sty -- layout for printable language exercise sheets that are
+% filled in by hand (irregular verbs, word formation, phrasal verbs, ...).
+%
+% Exercise types
+%   \answerline[<width>]{<answer>}   ruled line for handwriting (cursive ruling)
+%   \ans{<answer>}                   \answerline of the full cell/line width
+%   \writinglines{<n>}               n full-width handwriting lines
+%   formtable environment            table of forms, \formrow{a, \ans{b}, ...}
+%   \gap[<width>]{<answer>}          dotted gap in running text
+%   \gapverb[<width>]{<verb>}{<ans>} dotted gap followed by the hint (<verb>)
+%   gapexercise environment          numbered list of gap sentences
+%   \wordbox{<a, b, c>}              framed list of words to choose from
+%   matching environment             [<keys>]{<left head>}{<right head>} with
+%                                    \matchpair{<left>}{<right>}; the right
+%                                    column is shuffled, pupils draw lines
+%
+% Options (package options or \worksheetsetup{...})
+%   solutions        print answers (in blue script) and matching lines
+%   ruling=cursive|single
+%   x-height, ascender, descender    handwriting ruling geometry
+%   gap-width        default width of \gap
+%   match-sep        vertical distance of rows in matching exercises
+%   seed             random seed for the matching shuffle
+%
+% Defining \WorksheetSolutions before loading the package also enables
+% solutions mode (used by the Makefile to build the answer key).
+
+\NeedsTeXFormat{LaTeX2e}[2022-06-01]
+\ProvidesExplPackage{worksheet}{2026/10/30}{1.0}
+  {Printable exercise sheets for verbs, nouns and idioms}
+
+% ---------------------------------------------------------------------------
+% Options
+% ---------------------------------------------------------------------------
+\bool_new:N \l__ws_solutions_bool
+\bool_new:N \l__ws_cursive_bool
+\dim_new:N  \l__ws_xheight_dim
+\dim_new:N  \l__ws_ascender_dim
+\dim_new:N  \l__ws_descender_dim
+\dim_new:N  \l__ws_gap_width_dim
+\dim_new:N  \l__ws_match_sep_dim
+\int_new:N  \l__ws_seed_int
+
+\keys_define:nn { worksheet }
+  {
+    solutions   .bool_set:N = \l__ws_solutions_bool ,
+    solutions   .default:n  = true ,
+    ruling      .choices:nn =
+      { cursive , single }
+      {
+        \int_compare:nNnTF { \l_keys_choice_int } = { 1 }
+          { \bool_set_true:N  \l__ws_cursive_bool }
+          { \bool_set_false:N \l__ws_cursive_bool }
+      } ,
+    ruling      .initial:n  = cursive ,
+    x-height    .dim_set:N  = \l__ws_xheight_dim ,
+    x-height    .initial:n  = 3.5mm ,
+    ascender    .dim_set:N  = \l__ws_ascender_dim ,
+    ascender    .initial:n  = 7mm ,
+    descender   .dim_set:N  = \l__ws_descender_dim ,
+    descender   .initial:n  = 3mm ,
+    gap-width   .dim_set:N  = \l__ws_gap_width_dim ,
+    gap-width   .initial:n  = 3.5cm ,
+    match-sep   .dim_set:N  = \l__ws_match_sep_dim ,
+    match-sep   .initial:n  = 1.1cm ,
+    seed        .int_set:N  = \l__ws_seed_int ,
+    seed        .initial:n  = 1 ,
+  }
+\ProcessKeyOptions [ worksheet ]
+
+\cs_if_exist:NT \WorksheetSolutions
+  { \bool_set_true:N \l__ws_solutions_bool }
+
+\NewDocumentCommand \worksheetsetup { m }
+  { \keys_set:nn { worksheet } {#1} }
+
+% ---------------------------------------------------------------------------
+% Page layout, fonts, colours
+% ---------------------------------------------------------------------------
+\RequirePackage[T1]{fontenc}
+\RequirePackage{tgheros}          % clear sans serif body text
+\RequirePackage{microtype}
+\RequirePackage[a4paper, margin=2cm, bottom=2.5cm]{geometry}
+\RequirePackage{xcolor}
+\RequirePackage{array}
+\RequirePackage{booktabs}
+\RequirePackage{enumitem}
+\RequirePackage{fancyhdr}
+\RequirePackage{tikz}
+
+\cs_set:Npn \familydefault { \sfdefault }
+\setlength \parindent { 0pt }
+\setlength \parskip   { 0.4em }
+
+\ExplSyntaxOff
+\definecolor{wsrule}{gray}{0.55}
+\definecolor{wsink}{gray}{0.15}
+\definecolor{wsanswer}{RGB}{0,70,170}
+\tikzset{
+  ws/baseline/.style  = {draw=wsrule, line width=0.5pt},
+  ws/xline/.style     = {draw=wsrule!70, line width=0.3pt,
+                         dash pattern=on 1.5pt off 1.5pt},
+  ws/ascender/.style  = {draw=wsrule!40, line width=0.25pt},
+  ws/dot/.style       = {fill=wsink},
+  ws/item/.style      = {inner sep=2pt, font=\normalsize},
+  ws/heading/.style   = {inner sep=2pt, font=\bfseries},
+  ws/solution/.style  = {draw=wsanswer, line width=0.9pt},
+  ws/wordbox/.style   = {draw=wsrule, rounded corners=3pt,
+                         inner xsep=8pt, inner ysep=6pt},
+}
+\ExplSyntaxOn
+
+% Answers are shown in a script face to mimic handwriting.
+\cs_new_protected:Npn \__ws_answer_font:
+  { \color{wsanswer} \fontfamily{qzc} \fontshape{it} \selectfont \Large }
+
+% Header/footer
+\tl_new:N \l__ws_title_tl
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand \headrulewidth { 0pt }
+\fancyfoot[L]{ \small \color{wsrule} \l__ws_title_tl }
+\fancyfoot[C]
+  {
+    \bool_if:NT \l__ws_solutions_bool
+      { \small \color{wsanswer} Answer~key }
+  }
+\fancyfoot[R]{ \small \color{wsrule} \thepage }
+
+% ---------------------------------------------------------------------------
+% Helpers
+% ---------------------------------------------------------------------------
+\dim_new:N \l__ws_tmp_dim
+
+% Avoid a page break unless at least #1 of vertical space is left.
+\cs_new_protected:Npn \__ws_need:n #1
+  {
+    \par
+    \skip_vertical:n { 0pt plus #1 }
+    \penalty -150 \scan_stop:
+    \skip_vertical:n { 0pt plus -#1 }
+  }
+
+% ---------------------------------------------------------------------------
+% Header and exercise headings
+% ---------------------------------------------------------------------------
+\cs_new_protected:Npn \__ws_field:n #1
+  {
+    #1 : \nobreakspace
+    \raisebox{-0.3ex}{ \textcolor{wsrule}{ \rule{5.5cm}{0.5pt} } }
+  }
+
+% \worksheetheader[<subtitle>]{<title>}
+\NewDocumentCommand \worksheetheader { O{} m }
+  {
+    \tl_gset:Nn \l__ws_title_tl {#2}
+    \par \noindent
+    { \LARGE \bfseries #2 } \hfill \__ws_field:n { Name }
+    \par \smallskip \noindent
+    \bool_if:NTF \l__ws_solutions_bool
+      { \textcolor{wsanswer}{ \large \bfseries Answer~key } }
+      { { \large #1 } }
+    \hfill \__ws_field:n { Date }
+    \par \smallskip \noindent
+    \rule{\linewidth}{0.8pt}
+    \par \bigskip
+  }
+
+\newcounter{wsexercise}
+
+% \exercise{<title>}{<instructions>}
+\NewDocumentCommand \exercise { m m }
+  {
+    \__ws_need:n { 8\baselineskip }
+    \addvspace { \bigskipamount }
+    \stepcounter{wsexercise}
+    \noindent { \large \bfseries \thewsexercise . \nobreakspace #1 }
+    \par \nobreak
+    \tl_if_blank:nF {#2}
+      { \noindent \textit{#2} \par \nobreak }
+    \smallskip
+  }
+
+% ---------------------------------------------------------------------------
+% Handwriting lines
+% ---------------------------------------------------------------------------
+% #1 = width, #2 = answer (shown only in solutions mode)
+\cs_new_protected:Npn \__ws_writing_line:nn #1 #2
+  {
+    \dim_set:Nn \l__ws_tmp_dim {#1}
+    \mode_leave_vertical:
+    \tikz [ baseline = 0pt ]
+      {
+        \path [ use~as~bounding~box ]
+          ( 0pt , \dim_eval:n { -\l__ws_descender_dim } ) ~ rectangle ~
+          ( \dim_use:N \l__ws_tmp_dim , \dim_eval:n { \l__ws_ascender_dim + 1pt } ) ;
+        \bool_if:NT \l__ws_cursive_bool
+          {
+            \draw [ ws/ascender ]
+              ( 0pt , \dim_use:N \l__ws_ascender_dim ) ~ -- ~
+              ( \dim_use:N \l__ws_tmp_dim , \dim_use:N \l__ws_ascender_dim ) ;
+            \draw [ ws/xline ]
+              ( 0pt , \dim_use:N \l__ws_xheight_dim ) ~ -- ~
+              ( \dim_use:N \l__ws_tmp_dim , \dim_use:N \l__ws_xheight_dim ) ;
+          }
+        \draw [ ws/baseline ]
+          ( 0pt , 0pt ) ~ -- ~ ( \dim_use:N \l__ws_tmp_dim , 0pt ) ;
+        \bool_if:NT \l__ws_solutions_bool
+          {
+            \tl_if_blank:nF {#2}
+              {
+                \node [ anchor = base~west , inner~sep = 0pt ] ~ at ~
+                  ( 1.5mm , 0.6pt ) { \__ws_answer_font: #2 } ;
+              }
+          }
+      }
+  }
+
+\NewDocumentCommand \answerline { O{\linewidth} m }
+  { \__ws_writing_line:nn {#1} {#2} }
+
+\NewDocumentCommand \ans { m }
+  { \__ws_writing_line:nn { \linewidth } {#1} }
+
+\NewDocumentCommand \writinglines { m }
+  {
+    \par
+    \int_step_inline:nn {#1}
+      {
+        \noindent \__ws_writing_line:nn { \linewidth } { } \par
+        \skip_vertical:n { 2mm }
+      }
+  }
+
+% ---------------------------------------------------------------------------
+% Form tables
+%   \begin{formtable}{Infinitive, Past simple, Past participle}
+%     \formrow{to go, \ans{went}, \ans{gone}}
+%   \end{formtable}
+% Rows are collected and typeset at the end of the environment.
+% ---------------------------------------------------------------------------
+\seq_new:N \l__ws_headers_seq
+\seq_new:N \l__ws_cells_seq
+\tl_new:N  \l__ws_head_tl
+\tl_new:N  \l__ws_body_tl
+\int_new:N \l__ws_cols_int
+\dim_new:N \l__ws_col_dim
+
+\NewDocumentEnvironment { formtable } { m }
+  {
+    \seq_set_split:Nnn \l__ws_headers_seq { , } {#1}
+    \int_set:Nn \l__ws_cols_int { \seq_count:N \l__ws_headers_seq }
+    \tl_clear:N \l__ws_head_tl
+    \tl_clear:N \l__ws_body_tl
+    \seq_map_indexed_inline:Nn \l__ws_headers_seq
+      {
+        \int_compare:nNnF {##1} = { 1 }
+          { \tl_put_right:Nn \l__ws_head_tl { & } }
+        \tl_put_right:Nn \l__ws_head_tl { \textbf{##2} }
+      }
+  }
+  {
+    \dim_set:Nn \l__ws_col_dim
+      {
+        ( \linewidth - 2\tabcolsep * \l__ws_cols_int ) / \l__ws_cols_int
+      }
+    \par \addvspace { \medskipamount } \noindent
+    \use:e
+      {
+        \exp_not:N \begin{tabular}
+          { * { \int_use:N \l__ws_cols_int } { p { \dim_use:N \l__ws_col_dim } } }
+      }
+      \toprule
+      \tl_use:N \l__ws_head_tl \\
+      \midrule
+      \tl_use:N \l__ws_body_tl
+      \bottomrule
+    \end{tabular}
+    \par \addvspace { \medskipamount }
+  }
+
+\NewDocumentCommand \formrow { m }
+  {
+    \seq_set_split:Nnn \l__ws_cells_seq { , } {#1}
+    \tl_put_right:Nx \l__ws_body_tl { \seq_use:Nn \l__ws_cells_seq { & } }
+    \tl_put_right:Nn \l__ws_body_tl { \\ }
+  }
+
+% ---------------------------------------------------------------------------
+% Gaps (dotted ellipsis to be filled in)
+% ---------------------------------------------------------------------------
+% #1 = width, #2 = answer
+\cs_new_protected:Npn \__ws_gap:nn #1 #2
+  {
+    \mode_leave_vertical:
+    \rlap { \makebox [#1] { \textcolor{wsrule}{ \dotfill } } }
+    \makebox [#1]
+      {
+        \bool_if:NT \l__ws_solutions_bool
+          { \raisebox { 0.35ex } { \__ws_answer_font: #2 } }
+      }
+  }
+
+\NewDocumentCommand \gap { O{\l__ws_gap_width_dim} m }
+  { \__ws_gap:nn {#1} {#2} }
+
+\NewDocumentCommand \gapverb { O{\l__ws_gap_width_dim} m m }
+  {
+    \__ws_gap:nn {#1} {#3}
+    \nobreakspace \textup{(} \textit{#2} \textup{)}
+  }
+
+\NewDocumentEnvironment { gapexercise } { O{} }
+  {
+    \begin{enumerate} [ label = \arabic*. , leftmargin = * ,
+                        itemsep = 1.2ex , topsep = 0.5ex , #1 ]
+    \linespread { 1.6 } \selectfont
+  }
+  { \end{enumerate} }
+
+% \wordbox{on, off, up}: framed list of words to choose from
+\clist_new:N \l__ws_words_clist
+\NewDocumentCommand \wordbox { m }
+  {
+    \clist_set:Nn \l__ws_words_clist {#1}
+    \par \noindent
+    \tikz [ baseline ]
+      \node [ ws/wordbox ]
+        { \clist_use:Nn \l__ws_words_clist { \hspace{1.5em} } } ;
+    \par \smallskip
+  }
+
+% ---------------------------------------------------------------------------
+% Matching quiz
+%   \begin{matching}{<left heading>}{<right heading>}
+%     \matchpair{<category>}{<answer>}
+%   \end{matching}
+% The right column is shuffled (no answer stays opposite its category).
+% The shuffle depends only on the seed and the position of the exercise,
+% so worksheet and answer key always show the same order.
+% ---------------------------------------------------------------------------
+\seq_new:N  \l__ws_left_seq
+\seq_new:N  \l__ws_right_seq
+\tl_new:N   \l__ws_lhead_tl
+\tl_new:N   \l__ws_rhead_tl
+\int_new:N  \l__ws_n_int
+\int_new:N  \l__ws_j_int
+\int_new:N  \l__ws_swap_int
+\int_new:N  \l__ws_tries_int
+\bool_new:N \l__ws_retry_bool
+\dim_new:N  \l__ws_mw_dim
+\int_new:N  \g__ws_matching_int
+\intarray_new:Nn \g__ws_perm_intarray { 100 }
+
+% Fisher-Yates shuffle of 1..#1 into \g__ws_perm_intarray
+\cs_new_protected:Npn \__ws_shuffle:n #1
+  {
+    \int_step_inline:nn {#1}
+      { \intarray_gset:Nnn \g__ws_perm_intarray {##1} {##1} }
+    \int_step_inline:nnnn {#1} { -1 } { 2 }
+      {
+        \int_set:Nn \l__ws_j_int { \int_rand:nn { 1 } {##1} }
+        \int_set:Nn \l__ws_swap_int
+          { \intarray_item:Nn \g__ws_perm_intarray {##1} }
+        \intarray_gset:Nnn \g__ws_perm_intarray {##1}
+          { \intarray_item:Nn \g__ws_perm_intarray { \l__ws_j_int } }
+        \intarray_gset:Nnn \g__ws_perm_intarray { \l__ws_j_int }
+          { \l__ws_swap_int }
+      }
+  }
+
+% Reshuffle until no item keeps its position (bounded number of tries).
+\cs_new_protected:Npn \__ws_derange:n #1
+  {
+    \int_zero:N \l__ws_tries_int
+    \bool_set_true:N \l__ws_retry_bool
+    \bool_while_do:Nn \l__ws_retry_bool
+      {
+        \__ws_shuffle:n {#1}
+        \int_incr:N \l__ws_tries_int
+        \bool_set_false:N \l__ws_retry_bool
+        \int_compare:nNnT {#1} > { 1 }
+          {
+            \int_step_inline:nn {#1}
+              {
+                \int_compare:nNnT
+                  { \intarray_item:Nn \g__ws_perm_intarray {##1} } = {##1}
+                  { \bool_set_true:N \l__ws_retry_bool }
+              }
+          }
+        \int_compare:nNnT \l__ws_tries_int > { 200 }
+          { \bool_set_false:N \l__ws_retry_bool }
+      }
+  }
+
+% \begin{matching}[<keys, e.g. match-sep=1.4cm>]{<left heading>}{<right heading>}
+\NewDocumentEnvironment { matching } { O{} m m }
+  {
+    \keys_set:nn { worksheet } {#1}
+    \seq_clear:N \l__ws_left_seq
+    \seq_clear:N \l__ws_right_seq
+    \tl_set:Nn \l__ws_lhead_tl {#2}
+    \tl_set:Nn \l__ws_rhead_tl {#3}
+  }
+  { \__ws_matching_typeset: }
+
+\NewDocumentCommand \matchpair { m m }
+  {
+    \seq_put_right:Nn \l__ws_left_seq  {#1}
+    \seq_put_right:Nn \l__ws_right_seq {#2}
+  }
+
+% y coordinate of row #1
+\cs_new:Npn \__ws_row_y:n #1 { \dim_eval:n { -#1 \l__ws_match_sep_dim } }
+% x coordinate as a fraction #1 of the line width
+\cs_new:Npn \__ws_col_x:n #1 { \dim_eval:n { #1 \l__ws_mw_dim } }
+
+\cs_new_protected:Npn \__ws_matching_typeset:
+  {
+    \int_set:Nn \l__ws_n_int { \seq_count:N \l__ws_left_seq }
+    \int_compare:nNnT \l__ws_n_int > { 100 }
+      { \msg_error:nn { worksheet } { too-many-pairs } }
+    \int_gincr:N \g__ws_matching_int
+    \sys_gset_rand_seed:n { \l__ws_seed_int + 101 * \g__ws_matching_int }
+    \__ws_derange:n { \l__ws_n_int }
+    \dim_set:Nn \l__ws_mw_dim { \linewidth }
+    \par \addvspace { \medskipamount } \noindent
+    \begin{tikzpicture}
+      % fix the horizontal extent to the full line width
+      \path ( 0pt , 0pt ) ~ ( \dim_use:N \l__ws_mw_dim , 0pt ) ;
+      \tl_if_blank:VF \l__ws_lhead_tl
+        {
+          \node [ ws/heading , anchor = east ] ~ at ~
+            ( \__ws_col_x:n { 0.40 } , \__ws_row_y:n { 0.2 } )
+            { \l__ws_lhead_tl } ;
+        }
+      \tl_if_blank:VF \l__ws_rhead_tl
+        {
+          \node [ ws/heading , anchor = west ] ~ at ~
+            ( \__ws_col_x:n { 0.62 } , \__ws_row_y:n { 0.2 } )
+            { \l__ws_rhead_tl } ;
+        }
+      \int_step_inline:nn { \l__ws_n_int }
+        {
+          \node [ ws/item , anchor = east , align = flush~right ,
+                  text~width = \__ws_col_x:n { 0.36 } ] ~ at ~
+            ( \__ws_col_x:n { 0.40 } , \__ws_row_y:n {##1} )
+            { \seq_item:Nn \l__ws_left_seq {##1} } ;
+          \fill [ ws/dot ]
+            ( \__ws_col_x:n { 0.42 } , \__ws_row_y:n {##1} ) ~ circle ~ [ radius = 2pt ] ;
+          \fill [ ws/dot ]
+            ( \__ws_col_x:n { 0.60 } , \__ws_row_y:n {##1} ) ~ circle ~ [ radius = 2pt ] ;
+          \node [ ws/item , anchor = west , align = flush~left ,
+                  text~width = \__ws_col_x:n { 0.36 } ] ~ at ~
+            ( \__ws_col_x:n { 0.62 } , \__ws_row_y:n {##1} )
+            {
+              \seq_item:Nn \l__ws_right_seq
+                { \intarray_item:Nn \g__ws_perm_intarray {##1} }
+            } ;
+          \bool_if:NT \l__ws_solutions_bool
+            {
+              % row ##1 on the right holds the answer to left row perm(##1)
+              \draw [ ws/solution ]
+                ( \__ws_col_x:n { 0.42 } ,
+                  \__ws_row_y:n { \intarray_item:Nn \g__ws_perm_intarray {##1} } )
+                ~ -- ~
+                ( \__ws_col_x:n { 0.60 } , \__ws_row_y:n {##1} ) ;
+            }
+        }
+    \end{tikzpicture}
+    \par \addvspace { \medskipamount }
+  }
+
+\msg_new:nnn { worksheet } { too-many-pairs }
+  { A~matching~exercise~supports~at~most~100~pairs. }
+
+\endinput
