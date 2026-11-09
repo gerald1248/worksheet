@@ -2,12 +2,72 @@
 %
 %   make build      -> exercises.pdf (worksheet) and exercises-solutions.pdf
 %
+% Layout: a key-terms summary comes first. Each topic (irregular verbs, word
+% formation, phrasal verbs) starts on a new page, and within a topic the
+% exercises go from the easiest type (matching) to the hardest (writing the
+% forms yourself).
+%
 \documentclass[11pt]{article}
 \usepackage{worksheet}
 
 \begin{document}
 
 \worksheetheader[Irregular verbs, nouns and phrasal verbs]{English Worksheet}
+
+% ===========================================================================
+% Key terms
+% ===========================================================================
+\begin{keyterms}
+  \keyterm{Infinitive}
+    {the basic form of a verb, usually with \textit{to}:
+     \textit{to sing}.}
+  \keyterm{Past simple}
+    {used for finished actions in the past:
+     \textit{Yesterday I sang in the choir.}}
+  \keyterm{Past participle}
+    {used with \textit{have}, \textit{has} or \textit{had}:
+     \textit{I have sung in the choir since 2020.}}
+  \keyterm{Irregular verb}
+    {a verb whose past forms do not end in \textit{-ed}.
+     You have to learn them by heart.}
+
+  \begin{formtable}{Infinitive, Past simple, Past participle}
+    \formrow{to hit,   hit,   hit}
+    \formrow{to sleep, slept, slept}
+    \formrow{to sing,  sang,  sung}
+  \end{formtable}
+
+  \keyterm{Noun}
+    {a word for a person, a thing or an activity. Many nouns are made
+     from verbs: \textit{to teach} $\rightarrow$ \textit{the teacher},
+     \textit{teaching}.}
+  \keyterm{Phrasal verb}
+    {a verb plus a small word. Together they have a new meaning:
+     \textit{to look after} = to take care of.}
+  \keyterm{Particle}
+    {the small word in a phrasal verb, for example \textit{up}, \textit{on},
+     \textit{off}, \textit{out}.}
+\end{keyterms}
+
+\clearpage
+
+% ===========================================================================
+% Topic 1: irregular verbs
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+\exercise{Irregular verbs: matching}%
+  {Draw a line from each infinitive to its past participle.}
+
+\begin{matching}{Infinitive}{Past participle}
+  \matchpair{to go}{gone}
+  \matchpair{to catch}{caught}
+  \matchpair{to swear}{sworn}
+  \matchpair{to grow}{grown}
+  \matchpair{to melt}{melted}
+  \matchpair{to wear}{worn}
+  \matchpair{to draw}{drawn}
+\end{matching}
 
 % ---------------------------------------------------------------------------
 \exercise{Irregular verbs}{Complete the table.}
@@ -36,6 +96,12 @@
   \item Where is Tom? He has \gapverb{to go}{gone} to the shops.
 \end{gapexercise}
 
+\clearpage
+
+% ===========================================================================
+% Topic 2: word formation
+% ===========================================================================
+
 % ---------------------------------------------------------------------------
 \exercise{From verb to noun}{Write the person and the activity (or result).}
 
@@ -49,19 +115,11 @@
   \formrow{\ans{to drive}, the driver,      \ans{driving}}
 \end{formtable}
 
-% ---------------------------------------------------------------------------
-\exercise{Irregular verbs: matching}%
-  {Draw a line from each infinitive to its past participle.}
+\clearpage
 
-\begin{matching}{Infinitive}{Past participle}
-  \matchpair{to go}{gone}
-  \matchpair{to catch}{caught}
-  \matchpair{to swear}{sworn}
-  \matchpair{to grow}{grown}
-  \matchpair{to melt}{melted}
-  \matchpair{to wear}{worn}
-  \matchpair{to draw}{drawn}
-\end{matching}
+% ===========================================================================
+% Topic 3: phrasal verbs
+% ===========================================================================
 
 % ---------------------------------------------------------------------------
 \exercise{Phrasal verbs: matching}%

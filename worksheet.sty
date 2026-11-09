@@ -10,6 +10,9 @@
 %   \gapverb[<width>]{<verb>}{<ans>} dotted gap followed by the hint (<verb>)
 %   gapexercise environment          numbered list of gap sentences
 %   \wordbox{<a, b, c>}              framed list of words to choose from
+%   keyterms environment             [<title>] framed summary of key terms with
+%                                    \keyterm{<term>}{<explanation>}; may also
+%                                    contain a formtable (plain text cells)
 %   matching environment             [<keys>]{<left head>}{<right head>} with
 %                                    \matchpair{<left>}{<right>}; the right
 %                                    column is shuffled, pupils draw lines
@@ -329,6 +332,39 @@
         { \clist_use:Nn \l__ws_words_clist { \hspace{1.5em} } } ;
     \par \smallskip
   }
+
+% ---------------------------------------------------------------------------
+% Key terms summary
+%   \begin{keyterms}[<title>]
+%     \keyterm{<term>}{<explanation>}
+%     \begin{formtable}...\end{formtable}     (any other content is allowed)
+%   \end{keyterms}
+% A framed box, typically placed after \worksheetheader.
+% ---------------------------------------------------------------------------
+\box_new:N \l__ws_keybox_box
+\dim_new:N \l__ws_keywidth_dim
+
+\NewDocumentEnvironment { keyterms } { O{Key~terms} }
+  {
+    \par \addvspace { \medskipamount }
+    \dim_set:Nn \l__ws_keywidth_dim { \linewidth - 20pt }
+    \hbox_set:Nw \l__ws_keybox_box
+      \begin{minipage}{ \l__ws_keywidth_dim }
+      \color{wsink}
+      { \large \bfseries #1 } \par \smallskip
+  }
+  {
+      \end{minipage}
+    \hbox_set_end:
+    \noindent
+    \begin{tikzpicture}
+      \node [ ws/wordbox ] { \box_use:N \l__ws_keybox_box } ;
+    \end{tikzpicture}
+    \par \addvspace { \medskipamount }
+  }
+
+\NewDocumentCommand \keyterm { m m }
+  { \par \noindent \textbf{#1} : ~ #2 \par }
 
 % ---------------------------------------------------------------------------
 % Matching quiz

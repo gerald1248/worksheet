@@ -15,6 +15,13 @@
 % Note: \formrow splits its argument at commas, so table cells must not
 % contain commas.
 %
+% Layout: a key-terms summary comes first. The parts then go from the easiest
+% question type to the hardest, and each part starts on a new page:
+%   1. matching (draw a line)
+%   2. complete the tables
+%   3. sentences with gaps
+%   4. longer tasks (a story, free writing)
+%
 \documentclass[11pt]{article}
 \usepackage{worksheet}
 
@@ -23,7 +30,77 @@
 \worksheetheader[The fifty most common irregular verbs]{Irregular Verbs}
 
 % ===========================================================================
-% Part 1: the forms, grouped by pattern
+% Key terms
+% ===========================================================================
+\begin{keyterms}
+  \keyterm{Infinitive}
+    {the basic form of a verb, usually with \textit{to}:
+     \textit{to sing}.}
+  \keyterm{Past simple}
+    {used for finished actions in the past:
+     \textit{Yesterday I sang in the choir.}}
+  \keyterm{Past participle}
+    {used with \textit{have}, \textit{has} or \textit{had}:
+     \textit{I have sung in the choir since 2020.}}
+  \keyterm{Irregular verb}
+    {a verb whose past forms do not end in \textit{-ed}.
+     You have to learn them by heart.}
+  \keyterm{Pattern}
+    {irregular verbs fall into groups. Some have one form for everything
+     (A-A-A), some have two forms the same (A-B-B), in some the past
+     participle is the same as the infinitive (A-B-A) and some have three different forms (A-B-C).}
+
+  \begin{formtable}{Infinitive, Past simple, Past participle, Pattern}
+    \formrow{to hit,   hit,   hit,   A-A-A}
+    \formrow{to sleep, slept, slept, A-B-B}
+    \formrow{to sing,  sang,  sung,  A-B-C}
+  \end{formtable}
+\end{keyterms}
+
+\clearpage
+
+% ===========================================================================
+% Part 1: matching
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+\exercise{Irregular verbs: past simple}%
+  {Draw a line from each infinitive to its past simple form.}
+
+\begin{matching}[match-sep=0.9cm]{Infinitive}{Past simple}
+  \matchpair{to say}{said}
+  \matchpair{to mean}{meant}
+  \matchpair{to stand}{stood}
+  \matchpair{to understand}{understood}
+  \matchpair{to do}{did}
+  \matchpair{to get}{got}
+  \matchpair{to make}{made}
+  \matchpair{to hear}{heard}
+  \matchpair{to have}{had}
+  \matchpair{to find}{found}
+\end{matching}
+
+% ---------------------------------------------------------------------------
+\exercise{Irregular verbs: past participle}%
+  {Draw a line from each infinitive to its past participle.}
+
+\begin{matching}[match-sep=0.9cm]{Infinitive}{Past participle}
+  \matchpair{to be}{been}
+  \matchpair{to go}{gone}
+  \matchpair{to know}{known}
+  \matchpair{to begin}{begun}
+  \matchpair{to take}{taken}
+  \matchpair{to give}{given}
+  \matchpair{to draw}{drawn}
+  \matchpair{to speak}{spoken}
+  \matchpair{to write}{written}
+  \matchpair{to see}{seen}
+\end{matching}
+
+\clearpage
+
+% ===========================================================================
+% Part 2: complete the tables
 % ===========================================================================
 
 % ---------------------------------------------------------------------------
@@ -120,6 +197,12 @@
   \formrow{\ans{to choose},  \ans{chose},  chosen}
 \end{formtable}
 
+\clearpage
+
+% ===========================================================================
+% Part 3: the verbs in sentences
+% ===========================================================================
+
 % ---------------------------------------------------------------------------
 \exercise{Odd one out}%
   {Three verbs in each line follow the same pattern. Write the one that
@@ -135,44 +218,6 @@
   \item bring \quad think \quad drive \quad buy     \hfill \gap{drive}
   \item feel \quad keep \quad eat \quad mean        \hfill \gap{eat}
 \end{gapexercise}
-
-% ---------------------------------------------------------------------------
-\exercise{Irregular verbs: past simple}%
-  {Draw a line from each infinitive to its past simple form.}
-
-\begin{matching}{Infinitive}{Past simple}
-  \matchpair{to say}{said}
-  \matchpair{to mean}{meant}
-  \matchpair{to stand}{stood}
-  \matchpair{to understand}{understood}
-  \matchpair{to do}{did}
-  \matchpair{to get}{got}
-  \matchpair{to make}{made}
-  \matchpair{to hear}{heard}
-  \matchpair{to have}{had}
-  \matchpair{to find}{found}
-\end{matching}
-
-% ---------------------------------------------------------------------------
-\exercise{Irregular verbs: past participle}%
-  {Draw a line from each infinitive to its past participle.}
-
-\begin{matching}{Infinitive}{Past participle}
-  \matchpair{to be}{been}
-  \matchpair{to go}{gone}
-  \matchpair{to know}{known}
-  \matchpair{to begin}{begun}
-  \matchpair{to take}{taken}
-  \matchpair{to give}{given}
-  \matchpair{to draw}{drawn}
-  \matchpair{to speak}{spoken}
-  \matchpair{to write}{written}
-  \matchpair{to see}{seen}
-\end{matching}
-
-% ===========================================================================
-% Part 2: the verbs in context
-% ===========================================================================
 
 % ---------------------------------------------------------------------------
 \exercise{Past simple}{Put the verb in brackets into the past simple.}
@@ -267,6 +312,12 @@
   \item The glass has \textit{fell} off the table.           \hfill \gap{fallen}
   \item I \textit{seen} him in town yesterday.               \hfill \gap{saw}
 \end{gapexercise}
+
+\clearpage
+
+% ===========================================================================
+% Part 4: longer tasks
+% ===========================================================================
 
 % ---------------------------------------------------------------------------
 \exercise{Anna's Saturday}%
